@@ -1,0 +1,68 @@
+<div
+  class="flex flex-col gap-4 bg-[#ffffff] p-6 text-[#171717]"
+  cdkTrapFocus
+  [cdkTrapFocusAutoCapture]="true"
+  zardId="alert-dialog"
+  #z="zardId"
+>
+  @if (config.zTitle || config.zDescription) {
+    <header class="flex flex-col gap-2 text-center sm:text-left">
+      @if (config.zTitle) {
+        <h2
+          data-testid="z-alert-title"
+          [id]="titleId()"
+          class="text-lg font-semibold text-[#171717]"
+        >
+          {{ config.zTitle }}
+        </h2>
+      }
+
+      @if (config.zDescription) {
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-[#525252]">
+          {{ config.zDescription }}
+        </p>
+      }
+    </header>
+  }
+
+  <main>
+    <ng-template cdkPortalOutlet />
+
+    @if (isStringContent()) {
+      <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
+    }
+  </main>
+
+  <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+    @if (config.zCancelText !== null) {
+      <button
+        type="button"
+        data-testid="z-alert-cancel-button"
+        z-button
+        zType="outline"
+        class="border-[#d4d4d4] bg-[#ffffff] text-[#171717] hover:bg-[#f5f5f5]"
+        (click)="onCancelClick()"
+      >
+        {{ config.zCancelText || 'Cancel' }}
+      </button>
+    }
+
+    @if (config.zOkText !== null) {
+      <button
+        type="button"
+        data-testid="z-alert-ok-button"
+        z-button
+        [zType]="config.zOkDestructive ? 'destructive' : 'default'"
+        [zDisabled]="config.zOkDisabled"
+        [class]="
+          config.zOkDestructive
+            ? 'bg-[#b91c1c] text-[#ffffff] hover:bg-[#991b1b]'
+            : 'bg-[#171717] text-[#ffffff] hover:bg-[#262626]'
+        "
+        (click)="onOkClick()"
+      >
+        {{ config.zOkText || 'Continue' }}
+      </button>
+    }
+  </footer>
+</div>
