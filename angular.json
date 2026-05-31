@@ -53,7 +53,7 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": ["preview--aegis-r3-angular-app-review--juliosouzam.coder.souzas.cloud"]
+            "allowedHosts": [".coder.souzas.cloud"]
           },
           "configurations": {
             "production": {
