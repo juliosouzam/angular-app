@@ -2,3 +2,7 @@
   display: block;
   min-height: 100dvh;
 }
+
+a:focus-visible {
+  outline-color: currentColor;
+}
