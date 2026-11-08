@@ -1,211 +1,25 @@
-<main class="min-h-dvh bg-muted/30 px-4 py-6 text-foreground sm:px-6 lg:px-8">
-  <section class="mx-auto flex w-full max-w-6xl flex-col gap-6">
-    <header
-      class="flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between"
+<div class="min-h-screen bg-background text-foreground">
+  <header class="border-b border-border bg-background">
+    <div
+      class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
     >
-      <div class="space-y-2">
-        <div class="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-          <ng-icon name="lucideUsers" class="size-4" aria-hidden="true" />
-          <span>Usuários</span>
-        </div>
-        <div class="space-y-1">
-          <h1 class="text-2xl font-semibold tracking-normal sm:text-3xl">CRUD de usuários</h1>
-          <p class="max-w-2xl text-sm text-muted-foreground">
-            {{ totalUsers() }}
-            {{ totalUsers() === 1 ? 'usuário cadastrado' : 'usuários cadastrados' }}
-          </p>
-        </div>
-      </div>
-
-      <button
-        type="button"
-        z-button
-        class="w-full gap-2 bg-[#171717] text-[#ffffff] hover:bg-[#262626] sm:w-auto"
-        (click)="openCreateDialog()"
-      >
-        <ng-icon name="lucidePlus" class="size-4" aria-hidden="true" />
-        Criar usuário
-      </button>
-    </header>
-
-    @if (users().length === 0) {
-      <section
-        class="flex min-h-80 items-center justify-center rounded-lg border border-dashed border-border bg-background p-8"
-      >
-        <div class="max-w-md space-y-4 text-center">
-          <div
-            class="mx-auto flex size-12 items-center justify-center rounded-full border border-border bg-muted"
-          >
-            <ng-icon name="lucideUsers" class="size-5 text-muted-foreground" aria-hidden="true" />
-          </div>
-          <div class="space-y-2">
-            <h2 class="text-lg font-semibold">Nenhum usuário cadastrado</h2>
-            <p class="text-sm text-muted-foreground">
-              Crie o primeiro registro para começar a lista.
-            </p>
-          </div>
-          <button
-            type="button"
-            z-button
-            class="gap-2 bg-[#171717] text-[#ffffff] hover:bg-[#262626]"
-            (click)="openCreateDialog()"
-          >
-            <ng-icon name="lucidePlus" class="size-4" aria-hidden="true" />
-            Criar usuário
-          </button>
-        </div>
-      </section>
-    } @else {
-      <section class="overflow-hidden rounded-lg border border-border bg-background shadow-sm">
-        <div class="hidden overflow-x-auto md:block">
-          <table z-table class="min-w-[760px]">
-            <caption z-table-caption>
-              Usuários cadastrados
-            </caption>
-            <thead z-table-header>
-              <tr z-table-row>
-                <th z-table-head scope="col" class="w-[260px]">ID</th>
-                <th z-table-head scope="col">Nome</th>
-                <th z-table-head scope="col">E-mail</th>
-                <th z-table-head scope="col">Telefone</th>
-                <th z-table-head scope="col" class="w-[190px] text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody z-table-body>
-              @for (user of users(); track user.id) {
-                <tr z-table-row>
-                  <td z-table-cell class="max-w-[260px]">
-                    <span
-                      class="block truncate font-mono text-xs text-muted-foreground"
-                      [title]="user.id"
-                    >
-                      {{ user.id }}
-                    </span>
-                  </td>
-                  <td z-table-cell class="font-medium">{{ user.name }}</td>
-                  <td z-table-cell>
-                    <a
-                      class="text-foreground underline-offset-4 hover:underline"
-                      [href]="'mailto:' + user.email"
-                    >
-                      {{ user.email }}
-                    </a>
-                  </td>
-                  <td z-table-cell>
-                    <a
-                      class="text-foreground underline-offset-4 hover:underline"
-                      [href]="'tel:' + user.phone"
-                    >
-                      {{ user.phone }}
-                    </a>
-                  </td>
-                  <td z-table-cell>
-                    <div class="flex justify-end gap-2">
-                      <button
-                        type="button"
-                        z-button
-                        zType="outline"
-                        zSize="sm"
-                        class="gap-2 border-[#d4d4d4] bg-[#ffffff] text-[#171717] hover:bg-[#f5f5f5]"
-                        [attr.aria-label]="'Editar ' + user.name"
-                        (click)="openEditDialog(user)"
-                      >
-                        <ng-icon name="lucidePencil" class="size-4" aria-hidden="true" />
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        z-button
-                        zType="destructive"
-                        zSize="sm"
-                        class="gap-2 bg-[#b91c1c] text-[#ffffff] hover:bg-[#991b1b]"
-                        [attr.aria-label]="'Excluir ' + user.name"
-                        (click)="confirmDelete(user)"
-                      >
-                        <ng-icon name="lucideTrash2" class="size-4" aria-hidden="true" />
-                        Excluir
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-
-        <div class="divide-y divide-border md:hidden">
-          @for (user of users(); track user.id) {
-            <article class="grid gap-4 p-4">
-              <div class="space-y-2">
-                <h2 class="text-base font-semibold">{{ user.name }}</h2>
-                <p class="break-all font-mono text-xs text-muted-foreground">{{ user.id }}</p>
-              </div>
-
-              <div class="grid gap-3 text-sm">
-                <div class="flex items-start gap-3">
-                  <ng-icon
-                    name="lucideMail"
-                    class="mt-0.5 size-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <div class="min-w-0">
-                    <span class="sr-only">E-mail</span>
-                    <p class="break-all">
-                      <a
-                        class="underline-offset-4 hover:underline"
-                        [href]="'mailto:' + user.email"
-                        >{{ user.email }}</a
-                      >
-                    </p>
-                  </div>
-                </div>
-                <div class="flex items-start gap-3">
-                  <ng-icon
-                    name="lucidePhone"
-                    class="mt-0.5 size-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <div class="min-w-0">
-                    <span class="sr-only">Telefone</span>
-                    <p>
-                      <a class="underline-offset-4 hover:underline" [href]="'tel:' + user.phone">{{
-                        user.phone
-                      }}</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  z-button
-                  zType="outline"
-                  zSize="sm"
-                  class="gap-2 border-[#d4d4d4] bg-[#ffffff] text-[#171717] hover:bg-[#f5f5f5]"
-                  [attr.aria-label]="'Editar ' + user.name"
-                  (click)="openEditDialog(user)"
-                >
-                  <ng-icon name="lucidePencil" class="size-4" aria-hidden="true" />
-                  Editar
-                </button>
-                <button
-                  type="button"
-                  z-button
-                  zType="destructive"
-                  zSize="sm"
-                  class="gap-2 bg-[#b91c1c] text-[#ffffff] hover:bg-[#991b1b]"
-                  [attr.aria-label]="'Excluir ' + user.name"
-                  (click)="confirmDelete(user)"
-                >
-                  <ng-icon name="lucideTrash2" class="size-4" aria-hidden="true" />
-                  Excluir
-                </button>
-              </div>
-            </article>
-          }
-        </div>
-      </section>
-    }
-  </section>
-</main>
+      <span class="text-lg font-semibold tracking-tight">Orquestra</span>
+      <nav aria-label="Navegação principal">
+        <ul class="flex flex-wrap gap-2">
+          <li>
+            <a
+              routerLink="/usuarios"
+              routerLinkActive="bg-muted text-foreground font-semibold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              ariaCurrentWhenActive="page"
+              class="inline-flex min-h-10 items-center rounded-md px-4 py-2 text-sm text-foreground underline-offset-4 hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2"
+            >
+              Usuários
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <router-outlet />
+</div>
